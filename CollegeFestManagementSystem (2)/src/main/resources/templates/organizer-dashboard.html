@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Organizer Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <h1>Welcome, <span th:text="${organizer.username}"></span>!</h1>
+
+    <a href="/organizer/events/new">Create New Event</a>
+
+    <h2>Your Events</h2>
+    <table border="1">
+        <tr>
+            <th>Title</th>
+            <th>Date</th>
+            <th>Venue</th>
+            <th>Status</th>
+        </tr>
+        <tr th:each="event : ${events}">
+            <td th:text="${event.title}"></td>
+            <td th:text="${event.date}"></td>
+            <td th:text="${event.venue}"></td>
+            <td th:text="${event.status}"></td>
+        </tr>
+    </table>
+</body>
+</html>

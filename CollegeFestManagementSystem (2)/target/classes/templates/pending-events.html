@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Pending Events</title>
+</head>
+<body>
+<h2>Pending Event Approvals</h2>
+
+<table border="1">
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+    <tr th:each="event : ${events}">
+        <td th:text="${event.title}">Title</td>
+        <td th:text="${event.description}">Description</td>
+        <td>
+            <form th:action="@{'/admin/approve/' + ${event.id}}" method="post" style="display:inline;">
+                <button type="submit">Approve</button>
+            </form>
+            <form th:action="@{'/admin/reject/' + ${event.id}}" method="post" style="display:inline;">
+                <button type="submit">Reject</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
