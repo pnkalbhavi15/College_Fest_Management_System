@@ -1,11 +1,15 @@
+com\collegefest\controller\VolunteerController.class
 com\collegefest\repository\AdminRepository.class
 com\collegefest\controller\OrganizerAuthController.class
 com\collegefest\repository\EventRepository.class
+com\collegefest\model\Volunteer.class
+com\collegefest\controller\MainController.class
 com\collegefest\repository\OrganizerRepository.class
 com\collegefest\model\Organizer.class
 com\collegefest\model\Event.class
 com\collegefest\controller\AuthController.class
 com\collegefest\model\Admin.class
+com\collegefest\repository\VolunteerRepository.class
 com\collegefest\controller\OrganizerController.class
 com\collegefest\CollegeFestManagementSystemApplication.class
 com\collegefest\controller\AdminController.class

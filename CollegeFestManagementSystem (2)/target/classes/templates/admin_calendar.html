@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Event Calendar</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+
+    <style>
+        body {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            font-family: 'Segoe UI', sans-serif;
+            color: #fff;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(255,255,255,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        #calendar {
+            background-color: #fff;
+            color: #000;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .back-link {
+            margin-top: 30px;
+            display: inline-block;
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        .fc-event {
+            background-color: #27ae60 !important;
+            border: none;
+        }
+
+        .fc-toolbar-title {
+            font-size: 22px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>🗓 Approved Event Calendar</h2>
+
+    <label for="organizerFilter">Filter by Organizer:</label>
+    <select id="organizerFilter">
+        <option value="ALL">All Organizers</option>
+        <option th:each="org : ${organizers}" th:value="${org}" th:text="${org}"></option>
+    </select>
+
+    <div id="calendar"></div>
+
+    <a class="back-link" th:href="@{/admin/dashboard}">← Back to Dashboard</a>
+</div>
+
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var allEvents = [
+            /*[[# th:each="e : ${events}" ]]*/
+            {
+                title: /*[[${e.title}]]*/,
+                start: /*[[${e.date}]]*/,
+                description: /*[[${e.description}]]*/,
+                organizer: /*[[${e.organizer.username}]]*/
+            }/*[[${eStat.last} ? '' : ',' ]]*/
+            /*[[/th:each]]*/
+        ];
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,listWeek'
+            },
+            events: allEvents
+        });
+
+        calendar.render();
+
+        // Filtering by organizer
+        document.getElementById("organizerFilter").addEventListener("change", function () {
+            const selected = this.value;
+            const filtered = selected === "ALL"
+                ? allEvents
+                : allEvents.filter(e => e.organizer === selected);
+
+            calendar.removeAllEvents();
+            calendar.addEventSource(filtered);
+        });
+    });
+</script>
+</body>
+</html>

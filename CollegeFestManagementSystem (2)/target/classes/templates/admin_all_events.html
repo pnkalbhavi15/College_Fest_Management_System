@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Events</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <style>
+        .container {
+            margin: 30px auto;
+            max-width: 1000px;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            border-radius: 12px;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255,255,255,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+
+        th {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .status {
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .PENDING {
+            background-color: #f39c12;
+        }
+
+        .APPROVED {
+            background-color: #27ae60;
+        }
+
+        .REJECTED {
+            background-color: #e74c3c;
+        }
+
+        a.back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #fff;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>📋 All Events Overview</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Organizer</th>
+                    <th>Date</th>
+                    <th>Venue</th>
+                    <th>Status</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="event : ${events}">
+                    <td th:text="${event.title}">Title</td>
+                    <td th:text="${event.organizer.username}">Organizer</td>
+                    <td th:text="${event.date}">Date</td>
+                    <td th:text="${event.venue}">Venue</td>
+                    <td><span th:text="${event.status}" th:class="'status ' + ${event.status}">Status</span></td>
+                    <td th:text="${event.description}">Description</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a class="back-link" th:href="@{/admin/dashboard}">← Back to Dashboard</a>
+    </div>
+</body>
+</html>

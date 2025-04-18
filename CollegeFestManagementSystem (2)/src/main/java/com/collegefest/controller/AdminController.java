@@ -46,4 +46,20 @@ public class AdminController {
         }
         return "redirect:/admin/pending-events";
     }
+
+    @GetMapping("/all-events")
+    public String viewAllEvents(Model model) {
+        List<Event> allEvents = eventRepository.findAll();
+        model.addAttribute("events", allEvents);
+        return "admin_all_events";
+    }
+
+    @GetMapping("/calendar")
+    public String showCalendar(Model model) {
+        List<Event> approvedEvents = eventRepository.findByStatus("APPROVED");
+        model.addAttribute("events", approvedEvents);
+        return "admin_calendar";
+    }
+
+
 }
