@@ -68,7 +68,7 @@ public class AuthController {
     public String dashboard(HttpSession session, Model model) {
         Admin admin = (Admin) session.getAttribute("loggedInAdmin");
         if (admin == null) {
-            return "redirect:/login";
+            return "redirect:/admin/login";
         }
         model.addAttribute("admin", admin);
         return "admin_dashboard";
