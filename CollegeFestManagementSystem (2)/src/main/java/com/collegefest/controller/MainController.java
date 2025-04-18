@@ -15,14 +15,14 @@ public class MainController {
     @GetMapping("/redirectToLogin")
     public String redirectToLogin(@RequestParam String role) {
         switch (role) {
-            case "admin":
-                return "redirect:/admin/login";
-            case "organizer":
-                return "redirect:/organizer/login";
-            case "volunteer":
-                return "redirect:/volunteer/login";
-            default:
-                return "redirect:/";
+
+            case "admin": return "redirect:/admin/login";
+            case "organizer": return "redirect:/organizer/login";
+            case "participant": return "redirect:/participant/login";
+            case "volunteer":return "redirect:/volunteer/login";
+            default: return "redirect:/";
         }
     }
+
 }
+
