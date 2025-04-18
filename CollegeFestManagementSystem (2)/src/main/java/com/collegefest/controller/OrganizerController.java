@@ -48,12 +48,24 @@ public class OrganizerController {
 
     @PostMapping("/events/save")
     public String saveEvent(@ModelAttribute Event event, HttpSession session) {
-        Organizer organizer = (Organizer) session.getAttribute("loggedInOrganizer");
-        if (organizer != null) {
+        try {
+            Organizer organizer = (Organizer) session.getAttribute("loggedInOrganizer");
+
+            if (organizer == null) {
+                System.out.println("❌ Organizer not in session");
+                return "redirect:/organizer/login";
+            }
+
             event.setOrganizer(organizer);
             event.setStatus("Pending");
+
+            System.out.println("📅 Received date: " + event.getDate());
             eventRepo.save(event);
+        } catch (Exception e) {
+            e.printStackTrace(); // Watch console for binding or DB errors
         }
+
         return "redirect:/organizer/dashboard";
     }
+
 }

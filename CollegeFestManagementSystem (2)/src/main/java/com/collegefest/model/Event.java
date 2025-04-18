@@ -21,6 +21,10 @@ public class Event {
     private String title;
     private String description;
     private String venue;
+    private String location;
+    private String name;
+    private String category;
+
 
     @DateTimeFormat(pattern = "yyyy-MM-dd") // ✅ This fixes the LocalDate binding issue
     private LocalDate date;
@@ -32,6 +36,17 @@ public class Event {
     private Organizer organizer;
 
     // --- Getters and Setters ---
+
+    private Boolean approved = false; // or true, depending on your logic
+
+    public Boolean getApproved() {
+        return approved;
+    }
+
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
+    }
+
 
     public Long getId() {
         return id;
@@ -88,5 +103,31 @@ public class Event {
     public void setOrganizer(Organizer organizer) {
         this.organizer = organizer;
     }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    
 
 }

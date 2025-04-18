@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Admin Dashboard</title></head>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
 <body>
     <h2>Welcome, <span th:text="${admin.username}">Admin</span>!</h2>
     <p>Email: <span th:text="${admin.email}"></span></p>
@@ -9,6 +12,9 @@
     <a href="/admin/pending-events">
         <button>Review Pending Events</button>
     </a>
+
+    <a href="/admin/pending-events">Manage Pending Events</a>
+
     
     
     <a th:href="@{/logout}">Logout</a>

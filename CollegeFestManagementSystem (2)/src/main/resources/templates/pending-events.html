@@ -2,28 +2,46 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Pending Events</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
 </head>
 <body>
-<h2>Pending Event Approvals</h2>
+<div class="container">
+    <h2>Pending Events</h2>
 
-<table border="1">
-    <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Actions</th>
-    </tr>
-    <tr th:each="event : ${events}">
-        <td th:text="${event.title}">Title</td>
-        <td th:text="${event.description}">Description</td>
-        <td>
-            <form th:action="@{'/admin/approve/' + ${event.id}}" method="post" style="display:inline;">
-                <button type="submit">Approve</button>
-            </form>
-            <form th:action="@{'/admin/reject/' + ${event.id}}" method="post" style="display:inline;">
-                <button type="submit">Reject</button>
-            </form>
-        </td>
-    </tr>
-</table>
+    <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 20px; background-color: rgba(255,255,255,0.1); color: white;">
+        <thead>
+        <tr style="background-color: rgba(255,255,255,0.2);">
+            <th style="padding: 10px;">Title</th>
+            <th style="padding: 10px;">Description</th>
+            <th style="padding: 10px;">Venue</th>
+            <th style="padding: 10px;">Date</th>
+            <th style="padding: 10px;">Organizer</th>
+            <th style="padding: 10px;">Status</th>
+            <th style="padding: 10px;">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="event : ${events}">
+            <td th:text="${event.title}" style="padding: 8px;"></td>
+            <td th:text="${event.description}" style="padding: 8px;"></td>
+            <td th:text="${event.venue}" style="padding: 8px;"></td>
+            <td th:text="${event.date}" style="padding: 8px;"></td>
+            <td th:text="${event.organizer.username}" style="padding: 8px;"></td>
+            <td th:text="${event.status}" style="padding: 8px;"></td>
+            <td style="padding: 8px;">
+                <form th:action="@{'/admin/approve/' + ${event.id}}" method="post" style="display:inline;">
+                    <button>Approve</button>
+                </form>
+                <form th:action="@{'/admin/reject/' + ${event.id}}" method="post" style="display:inline;">
+                    <button style="background-color: #e74c3c;">Reject</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <a href="/admin/dashboard" style="color: #fff; text-decoration: underline;">← Back to Dashboard</a>
+</div>
 </body>
 </html>
