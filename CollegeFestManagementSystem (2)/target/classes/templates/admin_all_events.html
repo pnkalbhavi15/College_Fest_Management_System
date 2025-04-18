@@ -67,6 +67,26 @@
     <div class="container">
         <h2>📋 All Events Overview</h2>
 
+        <div style="margin-bottom: 20px; display: flex; justify-content: space-between; flex-wrap: wrap;">
+            <div>
+                <label>Status:</label>
+                <select id="statusFilter">
+                    <option value="ALL">All</option>
+                    <option value="APPROVED">Approved</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="REJECTED">Rejected</option>
+                </select>
+            </div>
+            <div>
+                <label>Organizer:</label>
+                <select id="organizerFilter">
+                    <option value="ALL">All</option>
+                    <option th:each="org : ${organizers}" th:value="${org}" th:text="${org}"></option>
+                </select>
+            </div>
+        </div>
+        
+
         <table>
             <thead>
                 <tr>
@@ -94,3 +114,28 @@
     </div>
 </body>
 </html>
+
+<script>
+    const statusSelect = document.getElementById("statusFilter");
+    const organizerSelect = document.getElementById("organizerFilter");
+
+    statusSelect.addEventListener("change", filterEvents);
+    organizerSelect.addEventListener("change", filterEvents);
+
+    function filterEvents() {
+        const status = statusSelect.value;
+        const organizer = organizerSelect.value;
+
+        const rows = document.querySelectorAll("tbody tr");
+        rows.forEach(row => {
+            const eventStatus = row.querySelector(".status").textContent.trim();
+            const eventOrganizer = row.children[1].textContent.trim();
+
+            const matchesStatus = status === "ALL" || eventStatus === status;
+            const matchesOrganizer = organizer === "ALL" || eventOrganizer === organizer;
+
+            row.style.display = matchesStatus && matchesOrganizer ? "" : "none";
+        });
+    }
+</script>
+

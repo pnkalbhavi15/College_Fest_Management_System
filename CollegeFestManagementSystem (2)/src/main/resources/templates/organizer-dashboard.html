@@ -19,7 +19,6 @@
             <th>Name</th>
             <th>Category</th>
             <th>Status</th>
-            <th>Approved</th>
         </tr>
         
         <tr th:each="event : ${events}">
@@ -30,7 +29,6 @@
             <td th:text="${event.name}"></td>
             <td th:text="${event.category}"></td>
             <td th:text="${event.status}"></td>
-            <td th:text="${event.approved} ? 'Yes' : 'No'"></td>
         </tr>
         
     </table>
