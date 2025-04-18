@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -68,4 +69,45 @@ public class OrganizerController {
         return "redirect:/organizer/dashboard";
     }
 
+    @GetMapping("/edit-event/{id}")
+    public String showEditEventForm(@PathVariable Long id, Model model, HttpSession session) {
+        Event event = eventRepo.findById(id).orElse(null);
+        Organizer organizer = (Organizer) session.getAttribute("loggedInOrganizer");
+
+        if (event == null || organizer == null || !event.getOrganizer().getId().equals(organizer.getId())) {
+            return "redirect:/organizer/dashboard";
+        }
+
+        model.addAttribute("event", event);
+        return "organizer_edit_events";
+    }
+
+    @PostMapping("/update-event")
+    public String updateEvent(@ModelAttribute Event event, HttpSession session) {
+        Organizer organizer = (Organizer) session.getAttribute("loggedInOrganizer");
+        if (organizer == null) return "redirect:/organizer/login";
+
+        Event existing = eventRepo.findById(event.getId()).orElse(null);
+        if (existing != null && existing.getOrganizer().getId().equals(organizer.getId())) {
+            existing.setTitle(event.getTitle());
+            existing.setDescription(event.getDescription());
+            existing.setDate(event.getDate());
+            existing.setVenue(event.getVenue());
+            eventRepo.save(existing);
+        }
+
+        return "redirect:/organizer/dashboard";
+    }
+
+    @GetMapping("/delete-event/{id}")
+    public String deleteEvent(@PathVariable Long id, HttpSession session) {
+        Organizer organizer = (Organizer) session.getAttribute("loggedInOrganizer");
+        Event event = eventRepo.findById(id).orElse(null);
+
+        if (event != null && organizer != null && event.getOrganizer().getId().equals(organizer.getId())) {
+            eventRepo.delete(event);
+        }
+
+        return "redirect:/organizer/dashboard";
+    }
 }
