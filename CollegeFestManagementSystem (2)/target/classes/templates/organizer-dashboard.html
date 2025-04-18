@@ -15,14 +15,24 @@
             <th>Title</th>
             <th>Date</th>
             <th>Venue</th>
+            <th>Location</th>
+            <th>Name</th>
+            <th>Category</th>
             <th>Status</th>
+            <th>Approved</th>
         </tr>
+        
         <tr th:each="event : ${events}">
             <td th:text="${event.title}"></td>
             <td th:text="${event.date}"></td>
             <td th:text="${event.venue}"></td>
+            <td th:text="${event.location}"></td>
+            <td th:text="${event.name}"></td>
+            <td th:text="${event.category}"></td>
             <td th:text="${event.status}"></td>
+            <td th:text="${event.approved} ? 'Yes' : 'No'"></td>
         </tr>
+        
     </table>
 </body>
 </html>

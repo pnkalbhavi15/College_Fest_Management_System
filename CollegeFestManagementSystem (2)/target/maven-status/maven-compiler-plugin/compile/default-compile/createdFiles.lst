@@ -2,8 +2,11 @@ com\collegefest\repository\AdminRepository.class
 com\collegefest\controller\ParticipantAuthController.class
 com\collegefest\controller\OrganizerAuthController.class
 com\collegefest\repository\EventRepository.class
+<<<<<<< HEAD
 com\collegefest\controller\HomeController.class
 com\collegefest\repository\ParticipantEventRepository.class
+=======
+>>>>>>> 04e2b3945096a212aef331bb7aac9d92eebbe340
 com\collegefest\repository\OrganizerRepository.class
 com\collegefest\model\Organizer.class
 com\collegefest\model\Event.class
