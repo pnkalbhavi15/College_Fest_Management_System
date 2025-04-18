@@ -15,12 +15,11 @@ public class HomeController {
     @GetMapping("/redirectToLogin")
     public String redirectToLogin(@RequestParam("role") String role) {
         switch (role) {
-            case "admin":
-                return "redirect:/admin/login";
-            case "organizer":
-                return "redirect:/organizer/login";
-            default:
-                return "redirect:/"; // fallback to homepage
+            case "admin": return "redirect:/admin/login";
+            case "organizer": return "redirect:/organizer/login";
+            case "participant": return "redirect:/participant/login";
+            default: return "redirect:/";
         }
     }
+
 }
