@@ -1,7 +1,6 @@
 com\collegefest\repository\AdminRepository.class
 com\collegefest\controller\OrganizerAuthController.class
 com\collegefest\repository\EventRepository.class
-com\collegefest\controller\HomeController.class
 com\collegefest\repository\OrganizerRepository.class
 com\collegefest\model\Organizer.class
 com\collegefest\model\Event.class
