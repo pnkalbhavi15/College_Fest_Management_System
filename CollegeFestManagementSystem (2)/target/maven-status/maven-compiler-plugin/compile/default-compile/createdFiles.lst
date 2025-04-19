@@ -10,6 +10,7 @@ com\collegefest\repository\OrganizerRepository.class
 com\collegefest\model\Organizer.class
 com\collegefest\model\Event.class
 com\collegefest\controller\AuthController.class
+com\collegefest\repository\AttendanceRepository.class
 com\collegefest\model\Admin.class
 com\collegefest\repository\ParticipantRepository.class
 com\collegefest\repository\VolunteerRepository.class
@@ -17,4 +18,5 @@ com\collegefest\controller\OrganizerController.class
 com\collegefest\model\ParticipantEvent.class
 com\collegefest\CollegeFestManagementSystemApplication.class
 com\collegefest\model\Participant.class
+com\collegefest\model\Attendance.class
 com\collegefest\controller\AdminController.class

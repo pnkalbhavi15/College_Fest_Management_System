@@ -1,5 +1,10 @@
 package com.collegefest.controller;
 
+import java.util.List;
+// Add these imports
+import com.collegefest.model.Attendance;
+import com.collegefest.repository.AttendanceRepository;
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +22,52 @@ public class VolunteerController {
     
     @Autowired
     private VolunteerRepository volunteerRepo;
-    
+    @Autowired
+    private AttendanceRepository attendanceRepo;
     @GetMapping("/volunteer/login")
     public String loginPage() {
         return "volunteer_login";
     }
     
+    @GetMapping("/volunteer/dashboard/attendance")
+    public String attendancePage(HttpSession session, Model model) {
+        Volunteer volunteer = (Volunteer) session.getAttribute("loggedInVolunteer");
+        if (volunteer == null) {
+            return "redirect:/volunteer/login";
+        }
+        
+        List<Attendance> attendanceRecords = attendanceRepo.findByVolunteer(volunteer);
+        model.addAttribute("attendanceRecords", attendanceRecords);
+        model.addAttribute("volunteer", volunteer);
+        return "volunteer_attendance";
+    }
+    @PostMapping("/volunteer/check-in")
+    public String checkIn(HttpSession session) {
+        Volunteer volunteer = (Volunteer) session.getAttribute("loggedInVolunteer");
+        if (volunteer != null) {
+            Attendance attendance = new Attendance();
+            attendance.setVolunteer(volunteer);
+            attendance.setCheckInTime(LocalDateTime.now());
+            attendance.setStatus("PRESENT");
+            attendanceRepo.save(attendance);
+        }
+        return "redirect:/volunteer/dashboard/attendance";
+    }
+    @PostMapping("/volunteer/check-out")
+    public String checkOut(HttpSession session) {
+        Volunteer volunteer = (Volunteer) session.getAttribute("loggedInVolunteer");
+        if (volunteer != null) {
+            // Find today's check-in record that doesn't have a check-out time
+            List<Attendance> records = attendanceRepo.findByVolunteerAndCheckOutTimeIsNull(volunteer);
+            if (!records.isEmpty()) {
+                Attendance attendance = records.get(0);
+                attendance.setCheckOutTime(LocalDateTime.now());
+                attendanceRepo.save(attendance);
+            }
+        }
+        return "redirect:/volunteer/dashboard/attendance";
+    }
+
     @PostMapping("/volunteer/login")
     public String login(@RequestParam String username,
                         @RequestParam String password,
