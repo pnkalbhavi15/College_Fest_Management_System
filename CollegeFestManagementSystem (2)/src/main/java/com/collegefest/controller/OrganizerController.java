@@ -138,6 +138,7 @@ public class OrganizerController implements Subject {
             existing.setDescription(event.getDescription());
             existing.setDate(event.getDate());
             existing.setVenue(event.getVenue());
+            existing.setStatus("Pending");
             eventRepo.save(existing);
         }
 

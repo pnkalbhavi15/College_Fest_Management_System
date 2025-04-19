@@ -1,4 +1,5 @@
 com\collegefest\controller\VolunteerController.class
+<<<<<<< HEAD
 com\collegefest\strategy\AuthenticationStrategy.class
 com\collegefest\controller\OrganizerAuthController.class
 com\collegefest\strategy\BasicAuthenticationStrategy.class
@@ -11,6 +12,15 @@ com\collegefest\observer\Observer.class
 com\collegefest\repository\ParticipantRepository.class
 com\collegefest\repository\VolunteerRepository.class
 com\collegefest\observer\NotificationObserver.class
+=======
+com\collegefest\controller\OrganizerAuthController.class
+com\collegefest\model\Organizer.class
+com\collegefest\notification\EmailNotification.class
+com\collegefest\repository\AttendanceRepository.class
+com\collegefest\model\NotificationEntity.class
+com\collegefest\repository\ParticipantRepository.class
+com\collegefest\repository\VolunteerRepository.class
+>>>>>>> 48540f4c2655b7c31ca6cbf5a16ccfb1b6bae549
 com\collegefest\controller\OrganizerController.class
 com\collegefest\model\ParticipantEvent.class
 com\collegefest\CollegeFestManagementSystemApplication.class
@@ -25,12 +35,18 @@ com\collegefest\repository\NotificationRepository.class
 com\collegefest\controller\MainController.class
 com\collegefest\repository\ParticipantEventRepository.class
 com\collegefest\repository\OrganizerRepository.class
+<<<<<<< HEAD
 com\collegefest\decorator\LoggingVolunteerDecorator.class
 com\collegefest\decorator\VolunteerDecorator.class
+=======
+>>>>>>> 48540f4c2655b7c31ca6cbf5a16ccfb1b6bae549
 com\collegefest\model\Event.class
 com\collegefest\controller\AuthController.class
 com\collegefest\model\Admin.class
 com\collegefest\notification\DashboardNotification.class
 com\collegefest\notification\NotificationFactory.class
+<<<<<<< HEAD
 com\collegefest\strategy\PasswordAuthentication.class
+=======
+>>>>>>> 48540f4c2655b7c31ca6cbf5a16ccfb1b6bae549
 com\collegefest\controller\AdminController.class

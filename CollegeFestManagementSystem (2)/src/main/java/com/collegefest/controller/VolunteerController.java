@@ -36,7 +36,7 @@ public class VolunteerController {
 
     @GetMapping("/volunteer/login")
     public String loginPage() {
-        return "volunteer_login";
+        return "Volunteer_login";
     }
     
     @GetMapping("/volunteer/dashboard/attendance")
@@ -124,7 +124,7 @@ public class VolunteerController {
             return "redirect:/volunteer/dashboard";
         } else {
             model.addAttribute("error", "Invalid Credentials");
-            return "volunteer_login";
+            return "Volunteer_login";
         }
     }
     

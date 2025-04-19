@@ -24,6 +24,7 @@ public class Event {
     private String location;
     private String name;
     private String category;
+    
 
 
     @DateTimeFormat(pattern = "yyyy-MM-dd") // ✅ This fixes the LocalDate binding issue
