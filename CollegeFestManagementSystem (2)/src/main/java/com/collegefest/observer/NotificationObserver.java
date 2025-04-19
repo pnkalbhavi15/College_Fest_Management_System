@@ -1,4 +1,4 @@
-package com.collegefest.notification;
+package com.collegefest.observer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,16 +10,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component
-public class DashboardNotification implements Notification {
+public class NotificationObserver implements Observer {
 
-    private static final Logger logger = LoggerFactory.getLogger(DashboardNotification.class);
+    private static final Logger logger = LoggerFactory.getLogger(NotificationObserver.class);
 
     @Autowired
     private NotificationRepository notificationRepository;
 
+    private String recipientUsername;
+
+    public NotificationObserver() {
+        // Default constructor for Spring
+    }
+
+    public void setRecipientUsername(String recipientUsername) {
+        this.recipientUsername = recipientUsername;
+        logger.info("Recipient username set to: {}", recipientUsername);
+    }
+
     @Override
-    public void send(String recipientUsername, String message) {
-        logger.info("Sending dashboard notification to {}: {}", recipientUsername, message);
+    public void update(String message) {
+        logger.info("NotificationObserver update called for user: {} with message: {}", recipientUsername, message);
         NotificationEntity notification = new NotificationEntity();
         notification.setRecipientUsername(recipientUsername);
         notification.setMessage(message);

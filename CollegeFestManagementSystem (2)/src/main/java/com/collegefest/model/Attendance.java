@@ -13,6 +13,10 @@ public class Attendance {
     @ManyToOne
     @JoinColumn(name = "volunteer_id")
     private Volunteer volunteer;
+
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event event;
     
     private LocalDateTime checkInTime;
     private LocalDateTime checkOutTime;
@@ -23,6 +27,8 @@ public class Attendance {
     public void setId(Long id) { this.id = id; }
     public Volunteer getVolunteer() { return volunteer; }
     public void setVolunteer(Volunteer volunteer) { this.volunteer = volunteer; }
+    public Event getEvent() { return event; }
+    public void setEvent(Event event) { this.event = event; }
     public LocalDateTime getCheckInTime() { return checkInTime; }
     public void setCheckInTime(LocalDateTime checkInTime) { this.checkInTime = checkInTime; }
     public LocalDateTime getCheckOutTime() { return checkOutTime; }

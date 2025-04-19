@@ -1,5 +1,6 @@
 package com.collegefest.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,29 +18,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.collegefest.model.Event;
 import com.collegefest.model.NotificationEntity;
 import com.collegefest.model.Organizer;
-import com.collegefest.model.Task;
 import com.collegefest.repository.EventRepository;
 import com.collegefest.repository.NotificationRepository;
 import com.collegefest.repository.OrganizerRepository;
-import com.collegefest.repository.TaskRepository;
 
 import jakarta.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Controller
 @RequestMapping("/organizer")
-public class OrganizerController {
+public class OrganizerController implements Subject {
+
+    private static final Logger logger = LoggerFactory.getLogger(OrganizerController.class);
+
+    private List<Observer> observers = new ArrayList<>();
 
     @Autowired
     private EventRepository eventRepo;
 
     @Autowired
-    private OrganizerRepository organizerRepo;
-
-    @Autowired
     private NotificationRepository notificationRepository;
 
-    @Autowired
-    private TaskRepository taskRepo;
 
     @GetMapping("/dashboard")
     public String organizerDashboard(HttpSession session, Model model) {
@@ -62,23 +63,51 @@ public class OrganizerController {
         return "event-form";
     }
 
+    @Override
+    public void registerObserver(Observer observer) {
+        observers.add(observer);
+        logger.info("Observer registered: {}", observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+        logger.info("Observer removed: {}", observer);
+    }
+
+    @Override
+    public void notifyObservers(String message) {
+        logger.info("Notifying observers with message: {}", message);
+        for (Observer observer : observers) {
+            observer.update(message);
+        }
+    }
+
     @PostMapping("/events/save")
     public String saveEvent(@ModelAttribute Event event, HttpSession session) {
         try {
             Organizer organizer = (Organizer) session.getAttribute("loggedInOrganizer");
 
             if (organizer == null) {
-                System.out.println("❌ Organizer not in session");
+                logger.warn("Organizer not in session");
                 return "redirect:/organizer/login";
             }
 
             event.setOrganizer(organizer);
             event.setStatus("Pending");
 
-            System.out.println("📅 Received date: " + event.getDate());
+            logger.info("Received event date: {}", event.getDate());
             eventRepo.save(event);
+
+            // Use factory to create notification
+            Notification notification = notificationFactory.createNotification("dashboard");
+            notification.send(organizer.getUsername(), "New event created: " + event.getTitle());
+
+            // Notify observers about the new event
+            notifyObservers("New event created: " + event.getTitle());
+
         } catch (Exception e) {
-            e.printStackTrace(); // Watch console for binding or DB errors
+            logger.error("Error saving event", e);
         }
 
         return "redirect:/organizer/dashboard";
@@ -108,6 +137,7 @@ public class OrganizerController {
             existing.setDescription(event.getDescription());
             existing.setDate(event.getDate());
             existing.setVenue(event.getVenue());
+            existing.setStatus("Pending");
             eventRepo.save(existing);
         }
 
@@ -118,11 +148,6 @@ public class OrganizerController {
     public String deleteEvent(@PathVariable Long id, HttpSession session) {
         Organizer organizer = (Organizer) session.getAttribute("loggedInOrganizer");
         Event event = eventRepo.findById(id).orElse(null);
-
-        if (event != null && organizer != null && event.getOrganizer().getId().equals(organizer.getId())) {
-            eventRepo.delete(event);
-        }
-
         return "redirect:/organizer/dashboard";
     }
 
