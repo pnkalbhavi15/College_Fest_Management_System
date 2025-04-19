@@ -2,8 +2,13 @@ package com.collegefest.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional; // For Optional
 
+import org.slf4j.Logger; // For HttpStatus
+import org.slf4j.LoggerFactory; // For ResponseEntity
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,16 +20,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.collegefest.model.Event;
 import com.collegefest.model.NotificationEntity;
 import com.collegefest.model.Organizer;
+import com.collegefest.model.Task;
 import com.collegefest.notification.Notification;
 import com.collegefest.notification.NotificationFactory;
 import com.collegefest.observer.Observer;
 import com.collegefest.observer.Subject;
 import com.collegefest.repository.EventRepository;
 import com.collegefest.repository.NotificationRepository;
-import jakarta.servlet.http.HttpSession;
+import com.collegefest.repository.TaskRepository;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/organizer")
@@ -32,13 +37,16 @@ public class OrganizerController implements Subject {
 
     private static final Logger logger = LoggerFactory.getLogger(OrganizerController.class);
 
-    private List<Observer> observers = new ArrayList<>();
+    private final List<Observer> observers = new ArrayList<>();
 
     @Autowired
     private EventRepository eventRepo;
 
     @Autowired
     private NotificationRepository notificationRepository;
+
+    @Autowired
+    private TaskRepository taskRepo;
 
     @Autowired
     private NotificationFactory notificationFactory;
@@ -100,11 +108,9 @@ public class OrganizerController implements Subject {
             logger.info("Received event date: {}", event.getDate());
             eventRepo.save(event);
 
-            // Use factory to create notification
             Notification notification = notificationFactory.createNotification("dashboard");
             notification.send(organizer.getUsername(), "New event created: " + event.getTitle());
 
-            // Notify observers about the new event
             notifyObservers("New event created: " + event.getTitle());
 
         } catch (Exception e) {
@@ -150,5 +156,42 @@ public class OrganizerController implements Subject {
         Organizer organizer = (Organizer) session.getAttribute("loggedInOrganizer");
         Event event = eventRepo.findById(id).orElse(null);
         return "redirect:/organizer/dashboard";
+    }
+
+    @PostMapping("/event/{eventId}/task")
+    public String createTask(@PathVariable Long eventId, @ModelAttribute Task taskRequest, HttpSession session) {
+        Optional<Event> optionalEvent = eventRepo.findById(eventId);
+        if (!optionalEvent.isPresent()) {
+            return "redirect:/organizer/dashboard";  
+        }
+
+        Event event = optionalEvent.get();
+        taskRequest.setEvent(event);
+
+        taskRepo.save(taskRequest);
+
+        return "redirect:/organizer/dashboard";  
+    }
+
+    @GetMapping("/event/{eventId}/tasks")
+    public ResponseEntity<?> getTasksForEvent(@PathVariable Long eventId) {
+        Optional<Event> optionalEvent = eventRepo.findById(eventId);
+        if (!optionalEvent.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");
+        }
+        List<Task> tasks = taskRepo.findByEvent(optionalEvent.get());
+        return ResponseEntity.ok(tasks);
+    }
+
+    @GetMapping("/event/{eventId}/task/new")
+    public String showCreateTaskForm(@PathVariable Long eventId, Model model) {
+        Optional<Event> event = eventRepo.findById(eventId);
+        if (!event.isPresent()) {
+            return "redirect:/organizer/dashboard"; 
+        }
+
+        model.addAttribute("event", event.get());  
+        model.addAttribute("task", new Task());  
+        return "organizer_create_task";  
     }
 }

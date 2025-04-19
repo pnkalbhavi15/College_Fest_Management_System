@@ -3,6 +3,7 @@ com\collegefest\strategy\AuthenticationStrategy.class
 com\collegefest\controller\OrganizerAuthController.class
 com\collegefest\strategy\BasicAuthenticationStrategy.class
 com\collegefest\model\Organizer.class
+com\collegefest\repository\TaskRepository.class
 com\collegefest\notification\EmailNotification.class
 com\collegefest\observer\Subject.class
 com\collegefest\repository\AttendanceRepository.class
@@ -15,6 +16,7 @@ com\collegefest\controller\OrganizerController.class
 com\collegefest\model\ParticipantEvent.class
 com\collegefest\CollegeFestManagementSystemApplication.class
 com\collegefest\model\Participant.class
+com\collegefest\model\Task.class
 com\collegefest\model\Attendance.class
 com\collegefest\repository\AdminRepository.class
 com\collegefest\controller\ParticipantAuthController.class

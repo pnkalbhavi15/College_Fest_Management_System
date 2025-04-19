@@ -1,6 +1,9 @@
 package com.collegefest.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class Organizer {
@@ -46,4 +49,7 @@ public class Organizer {
     public void setEmail(String email) {
         this.email = email;
     }
+    
 }
+
+
