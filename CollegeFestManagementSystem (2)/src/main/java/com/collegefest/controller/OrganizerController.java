@@ -154,9 +154,31 @@ public class OrganizerController implements Subject {
     @GetMapping("/delete-event/{id}")
     public String deleteEvent(@PathVariable Long id, HttpSession session) {
         Organizer organizer = (Organizer) session.getAttribute("loggedInOrganizer");
-        Event event = eventRepo.findById(id).orElse(null);
-        return "redirect:/organizer/dashboard";
+        if (organizer == null) {
+            return "redirect:/organizer/login"; // If the user is not logged in, redirect to login
+        }
+
+        Optional<Event> eventOptional = eventRepo.findById(id);
+        if (!eventOptional.isPresent()) {
+            return "redirect:/organizer/dashboard"; // Event not found, redirect to dashboard
+        }
+
+        Event event = eventOptional.get();
+        if (!event.getOrganizer().getId().equals(organizer.getId())) {
+            return "redirect:/organizer/dashboard"; // Ensure that the logged-in organizer owns the event
+        }
+
+        // Delete the event
+        try {
+            eventRepo.delete(event);
+            logger.info("Event with ID {} deleted successfully", id);
+        } catch (Exception e) {
+            logger.error("Error deleting event with ID {}", id, e);
+        }
+
+        return "redirect:/organizer/dashboard"; // Redirect back to the dashboard after deletion
     }
+
 
     @PostMapping("/event/{eventId}/task")
     public String createTask(@PathVariable Long eventId, @ModelAttribute Task taskRequest, HttpSession session) {
