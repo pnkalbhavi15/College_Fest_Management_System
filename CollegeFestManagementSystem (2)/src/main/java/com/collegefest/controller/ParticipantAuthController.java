@@ -11,7 +11,9 @@ import com.collegefest.repository.EventRepository;
 import com.collegefest.repository.ParticipantEventRepository;
 import com.collegefest.model.Event;
 import com.collegefest.model.ParticipantEvent;
-
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class ParticipantAuthController {
@@ -79,9 +81,18 @@ public class ParticipantAuthController {
         }
 
         model.addAttribute("participant", participant);
-        model.addAttribute("events", eventRepo.findAll()); // Show all events
-        return "participant_events"; // View we’ll create next
+        model.addAttribute("events", eventRepo.findAll());
+
+        // Fetch registered events for this participant
+        List<ParticipantEvent> registeredEvents = participantEventRepo.findByParticipant(participant);
+        Set<Long> registeredEventIds = registeredEvents.stream()
+                .map(pe -> pe.getEvent().getId())
+                .collect(Collectors.toSet());
+
+        model.addAttribute("registeredEventIds", registeredEventIds);
+        return "participant_events";
     }
+
     @PostMapping("/participant/registerEvent")
     public String registerEvent(@RequestParam Long eventId, HttpSession session) {
         Participant participant = (Participant) session.getAttribute("loggedInParticipant");
