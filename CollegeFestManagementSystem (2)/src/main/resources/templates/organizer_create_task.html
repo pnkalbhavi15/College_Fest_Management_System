@@ -59,30 +59,20 @@
     <div class="form-container">
         <h2>Create New Task</h2>
         <form th:action="@{/organizer/event/{eventId}/task(eventId=${event.id})}" th:object="${task}" method="post">
-            <!-- Hidden field to send event ID -->
             <input type="hidden" th:field="*{event.id}" th:value="${event.id}"/>
-
+        
             <label for="title">Task Title:</label>
             <input type="text" th:field="*{title}" required/>
-
-            <label for="dueDate">Due Date:</label>
-            <input type="date" th:field="*{dueDate}" required/>
-
-            <label for="assignedTo">Assigned To:</label>
-            <input type="text" th:field="*{assignedTo}"/>
-
-            <label for="notes">Notes:</label>
-            <textarea th:field="*{notes}" rows="4"></textarea>
-
-            <label for="status">Status:</label>
-            <select th:field="*{status}">
-                <option value="PENDING">Pending</option>
-                <option value="IN_PROGRESS">In Progress</option>
-                <option value="COMPLETED">Completed</option>
-            </select>
-
+        
+            <label for="name">Name:</label>
+            <input type="text" th:field="*{name}" required/>
+        
+            <label for="description">Description:</label>
+            <textarea th:field="*{description}" rows="4" required></textarea>
+        
             <button type="submit">Create Task</button>
         </form>
+        
         <a th:href="@{/organizer/dashboard}">← Back to Dashboard</a>
     </div>
 </body>

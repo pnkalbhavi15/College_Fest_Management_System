@@ -451,9 +451,11 @@
             </div>
         </div>
         <div class="card">
-            <h3>Attendance</h3>
-            <p>Manage your attendance records</p>
-            <a th:href="@{/volunteer/dashboard/attendance}" style="color: #007bff; text-decoration: none;">Check In </a>
+            <h3><span class="icon">🕒</span> Your Attendance</h3>
+            <p>Manage your own attendance records</p>
+            <a th:href="@{/volunteer/dashboard/attendance}" class="btn btn-primary">
+                <span class="icon">✅</span> Check In
+            </a>
         </div>
     </div>
 </body>

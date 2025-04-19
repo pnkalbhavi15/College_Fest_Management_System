@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import com.collegefest.model.Volunteer;
 import com.collegefest.repository.VolunteerRepository;
 
-@Component("passwordAuthentication")
+@Component
 public class PasswordAuthenticationStrategy implements AuthenticationStrategy {
 
     @Autowired

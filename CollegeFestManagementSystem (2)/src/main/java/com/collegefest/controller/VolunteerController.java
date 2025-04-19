@@ -51,54 +51,29 @@ public class VolunteerController {
         model.addAttribute("volunteer", volunteer);
         return "volunteer_attendance";
     }
+
     @PostMapping("/volunteer/check-in")
-    public String checkIn(@RequestParam Long eventId, HttpSession session) {
+    public String checkIn(HttpSession session) {
         Volunteer volunteer = (Volunteer) session.getAttribute("loggedInVolunteer");
         if (volunteer != null) {
-            try {
-                Volunteer managedVolunteer = volunteerRepo.findById(volunteer.getId()).orElse(null);
-                if (managedVolunteer == null) {
-                    return "redirect:/volunteer/login";
-                }
-                Attendance attendance = new Attendance();
-                attendance.setVolunteer(managedVolunteer);
-                Event event = eventRepository.findById(eventId).orElse(null);
-                if (event == null) {
-                    return "redirect:/volunteer/dashboard";
-                }
-                attendance.setEvent(event);
-                attendance.setCheckInTime(LocalDateTime.now());
-                attendance.setStatus("PRESENT");
-                attendanceRepo.save(attendance);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            Attendance attendance = new Attendance();
+            attendance.setVolunteer(volunteer);
+            attendance.setCheckInTime(LocalDateTime.now());
+            attendance.setStatus("PRESENT");
+            attendanceRepo.save(attendance);
         }
         return "redirect:/volunteer/dashboard/attendance";
     }
     @PostMapping("/volunteer/check-out")
-    public String checkOut(@RequestParam Long eventId, HttpSession session) {
+    public String checkOut(HttpSession session) {
         Volunteer volunteer = (Volunteer) session.getAttribute("loggedInVolunteer");
         if (volunteer != null) {
-            try {
-                Volunteer managedVolunteer = volunteerRepo.findById(volunteer.getId()).orElse(null);
-                if (managedVolunteer == null) {
-                    return "redirect:/volunteer/login";
-                }
-                List<Attendance> records = attendanceRepo.findByVolunteerAndCheckOutTimeIsNull(managedVolunteer);
-                Attendance attendanceForEvent = null;
-                for (Attendance att : records) {
-                    if (att.getEvent() != null && att.getEvent().getId().equals(eventId)) {
-                        attendanceForEvent = att;
-                        break;
-                    }
-                }
-                if (attendanceForEvent != null) {
-                    attendanceForEvent.setCheckOutTime(LocalDateTime.now());
-                    attendanceRepo.save(attendanceForEvent);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            // Find today's check-in record that doesn't have a check-out time
+            List<Attendance> records = attendanceRepo.findByVolunteerAndCheckOutTimeIsNull(volunteer);
+            if (!records.isEmpty()) {
+                Attendance attendance = records.get(0);
+                attendance.setCheckOutTime(LocalDateTime.now());
+                attendanceRepo.save(attendance);
             }
         }
         return "redirect:/volunteer/dashboard/attendance";
