@@ -73,11 +73,17 @@
             <td th:text="${event.date}"></td>
             <td th:text="${event.venue}"></td>
             <td>
-                <form th:action="@{/participant/registerEvent}" method="post">
+                <form th:if="${not #lists.contains(registeredEventIds, event.id)}" 
+                      th:action="@{/participant/registerEvent}" method="post">
                     <input type="hidden" name="eventId" th:value="${event.id}" />
                     <button type="submit">Register</button>
                 </form>
+                <button th:if="${#lists.contains(registeredEventIds, event.id)}" 
+                        style="background-color: gray; cursor: not-allowed;" disabled>
+                    Registered
+                </button>
             </td>
+            
         </tr>
     </table>
 </body>
