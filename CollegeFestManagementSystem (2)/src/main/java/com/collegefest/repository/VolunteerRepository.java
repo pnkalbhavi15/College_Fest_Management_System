@@ -1,4 +1,5 @@
 package com.collegefest.repository;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -13,4 +14,7 @@ public interface VolunteerRepository extends JpaRepository<Volunteer, Long> {
     Volunteer findByUsernameAndPassword(String username, String password);
     
     Volunteer findByEmail(String email);
+    
+    @Override
+    Optional<Volunteer> findById(Long id);
 }
