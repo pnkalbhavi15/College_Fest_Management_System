@@ -19,3 +19,15 @@ CREATE TABLE attendance (
     PRIMARY KEY (id),
     FOREIGN KEY (volunteer_id) REFERENCES volunteer(id)
 );
+
+
+CREATE TABLE task (
+    task_id INT AUTO_INCREMENT PRIMARY KEY,
+    event_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    scheduled_time DATETIME,
+    claimed_by INT DEFAULT NULL, -- links to volunteer.volunteer_id when claimed
+    status VARCHAR(20) DEFAULT 'To Do',
+    FOREIGN KEY (event_id) REFERENCES event(event_id)
+);
