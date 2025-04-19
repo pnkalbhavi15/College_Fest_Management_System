@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.collegefest.model.Event;
+import com.collegefest.model.NotificationEntity;
 import com.collegefest.model.Organizer;
 import com.collegefest.repository.EventRepository;
+import com.collegefest.repository.NotificationRepository;
 import com.collegefest.repository.OrganizerRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -28,6 +30,10 @@ public class OrganizerController {
     @Autowired
     private OrganizerRepository organizerRepo;
 
+    @Autowired
+    private NotificationRepository notificationRepository;
+
+
     @GetMapping("/dashboard")
     public String organizerDashboard(HttpSession session, Model model) {
         Organizer organizer = (Organizer) session.getAttribute("loggedInOrganizer");
@@ -38,6 +44,8 @@ public class OrganizerController {
         List<Event> events = eventRepo.findByOrganizer(organizer);
         model.addAttribute("organizer", organizer);
         model.addAttribute("events", events);
+        List<NotificationEntity> notifications = notificationRepository.findByRecipientUsernameOrderByTimestampDesc(organizer.getUsername());
+        model.addAttribute("notifications", notifications);
         return "organizer-dashboard";
     }
 

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.collegefest.model.Event;
+import com.collegefest.notification.Notification;
+import com.collegefest.notification.NotificationFactory;
 import com.collegefest.repository.EventRepository;
 
 @Controller
@@ -23,6 +25,8 @@ public class AdminController {
 
     @Autowired
     private EventRepository eventRepository;
+
+    @Autowired private NotificationFactory notificationFactory;
 
     @GetMapping("/pending-events")
     public String viewPendingEvents(Model model) {
@@ -37,8 +41,12 @@ public class AdminController {
         if (event != null) {
             event.setStatus("APPROVED");
             eventRepository.save(event);
-        }
-        return "redirect:/admin/pending-events";
+                String username = event.getOrganizer().getUsername();
+                Notification notification = notificationFactory.createNotification("dashboard");
+                notification.send(username, "Your event \"" + event.getTitle() + "\" has been approved!");
+            }
+            return "redirect:/admin/pending-events";
+
     }
 
     @PostMapping("/reject/{eventId}")
@@ -47,8 +55,12 @@ public class AdminController {
         if (event != null) {
             event.setStatus("REJECTED");
             eventRepository.save(event);
-        }
-        return "redirect:/admin/pending-events";
+                String username = event.getOrganizer().getUsername();
+                Notification notification = notificationFactory.createNotification("dashboard");
+                notification.send(username, "Your event \"" + event.getTitle() + "\" has been rejected.");
+            }
+            return "redirect:/admin/pending-events";
+
     }
 
     @GetMapping("/all-events")
