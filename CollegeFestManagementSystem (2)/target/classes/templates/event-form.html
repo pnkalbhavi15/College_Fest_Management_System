@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Event</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <h2>Create New Event</h2>
+    <form th:action="@{/organizer/events/save}" th:object="${event}" method="post">
+        <label>Title: <input type="text" th:field="*{title}" required /></label><br>
+        <label>Description: <textarea th:field="*{description}" required></textarea></label><br>
+        <label>Venue: <input type="text" th:field="*{venue}" required /></label><br>
+        <label>Date: <input type="date" th:field="*{date}" required /></label><br>
+        <label>Location: <input type="text" th:field="*{location}" /></label><br>
+        <label>Name: <input type="text" th:field="*{name}" /></label><br>
+        <label>Category: <input type="text" th:field="*{category}" /></label><br>
+        <button type="submit">Create</button>
+    </form>
+    <a href="/organizer/dashboard">Back to Dashboard</a>
+</body>
+</html>

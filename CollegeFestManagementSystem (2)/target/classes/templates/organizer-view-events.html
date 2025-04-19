@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Events</title>
+</head>
+<body>
+<h2>My Created Events</h2>
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Category</th>
+        <th>Date</th>
+        <th>Status</th>
+    </tr>
+    <tr th:each="event : ${events}">
+        <td th:text="${event.name}">Event Name</td>
+        <td th:text="${event.description}">Description</td>
+        <td th:text="${event.category}">Category</td>
+        <td th:text="${event.date}">Date</td>
+    </tr>
+</table>
+</body>
+</html>
