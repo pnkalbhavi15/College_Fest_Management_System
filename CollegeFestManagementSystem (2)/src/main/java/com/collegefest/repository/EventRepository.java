@@ -10,5 +10,8 @@ import com.collegefest.model.Organizer;
 public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findByOrganizer(Organizer organizer);
     List<Event> findByStatus(String status);
+    
+    // Add this new method
+    Event findByIdAndStatus(Long id, String status);
 
 }

@@ -80,10 +80,12 @@ public class ParticipantAuthController {
             return "redirect:/participant/login";
         }
 
+        // Only fetch APPROVED events
+        List<Event> approvedEvents = eventRepo.findByStatus("APPROVED");
         model.addAttribute("participant", participant);
-        model.addAttribute("events", eventRepo.findAll());
+        model.addAttribute("events", approvedEvents);
 
-        // Fetch registered events for this participant
+        // Fetch registered events for this participant (only from approved events)
         List<ParticipantEvent> registeredEvents = participantEventRepo.findByParticipant(participant);
         Set<Long> registeredEventIds = registeredEvents.stream()
                 .map(pe -> pe.getEvent().getId())
@@ -100,7 +102,8 @@ public class ParticipantAuthController {
             return "redirect:/participant/login";
         }
 
-        Event event = eventRepo.findById(eventId).orElse(null);
+        // Only allow registration for APPROVED events
+        Event event = eventRepo.findByIdAndStatus(eventId, "APPROVED");
         if (event != null) {
             ParticipantEvent pe = new ParticipantEvent();
             pe.setParticipant(participant);
