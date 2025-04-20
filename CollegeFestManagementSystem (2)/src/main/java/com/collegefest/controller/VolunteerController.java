@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import com.collegefest.model.Task;
 import com.collegefest.model.Attendance;
 import com.collegefest.model.Event;
 import com.collegefest.model.ParticipantEvent;
@@ -17,6 +17,7 @@ import com.collegefest.model.Volunteer;
 import com.collegefest.repository.AttendanceRepository;
 import com.collegefest.repository.EventRepository;
 import com.collegefest.repository.ParticipantEventRepository;
+import com.collegefest.repository.TaskRepository;
 import com.collegefest.repository.VolunteerRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -36,6 +37,9 @@ public class VolunteerController {
 
     @Autowired 
     private ParticipantEventRepository participantEventRepo;
+
+    @Autowired  // Add this
+    private TaskRepository taskRepo;
     
 
     @GetMapping("/volunteer/login")
@@ -138,7 +142,8 @@ public class VolunteerController {
         if (volunteer == null) {
             return "redirect:/volunteer/login";
         }
-
+        List<Task> allTasks = taskRepo.findAll();  // This fetches all tasks
+        model.addAttribute("tasks", allTasks);
         // Only fetch APPROVED events
         List<Event> events = eventRepository.findByStatus("APPROVED");
         List<Attendance> attendanceRecords = attendanceRepo.findByVolunteer(volunteer);

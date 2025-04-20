@@ -33,7 +33,7 @@
             color: var(--text-color);
             line-height: 1.6;
             padding: 20px;
-            min-height: 100vh;
+            min-height: 150vh;
         }
         
         .dashboard-container {
@@ -485,9 +485,26 @@
             
             <div class="card">
                 <h3><span class="icon">✅</span> Tasks</h3>
-                <div class="empty-state">
-                    <div class="icon">📋</div>
-                    <p>No tasks assigned yet.</p>
+                <div th:if="${not #lists.isEmpty(tasks)}">
+                    <h3>All Tasks</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Associated Event</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="task : ${tasks}">
+                                <td th:text="${task.title}"></td>
+                                <td th:text="${task.description}"></td>
+                                <td th:text="${task.event.title}"></td>
+                                
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             
