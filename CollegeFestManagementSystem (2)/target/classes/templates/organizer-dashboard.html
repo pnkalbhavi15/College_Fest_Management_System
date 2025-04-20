@@ -11,6 +11,40 @@
             margin: 0;
             padding: 0;
         }
+        /* Task Table Styling */
+        .table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            color: #fff;
+        }
+
+        .table thead {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .table th,
+        .table td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .table th {
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
 
         .container {
             width: 90%;
@@ -189,21 +223,26 @@
 
         <!-- Tasks Section -->
         <h2 style="margin-top: 50px;">✅ My Tasks</h2>
-        <div class="event-grid">
-            <div th:each="task : ${tasks}" class="event-card">
-                <div class="event-title" th:text="${task.title}">Task Title</div>
-                <div class="event-meta" th:text="'📅 Due Date: ' + ${task.dueDate}">Due Date</div>
-                <div class="event-meta" th:text="'📌 Assigned To: ' + ${task.assignedTo}">Assigned To</div>
-                <div class="event-meta" th:text="'📝 Notes: ' + ${task.notes}">Notes</div>
-                <div class="status" th:text="'Status: ' + ${task.status}">Status</div>
-
-                <div class="btn-group">
-                    <a th:href="@{/organizer/edit-task/{id}(id=${task.id})}" class="btn btn-edit">✏️ Edit</a>
-                    <a th:href="@{/organizer/delete-task/{id}(id=${task.id})}" class="btn btn-delete"
-                    onclick="return confirm('Are you sure you want to delete this task?');">🗑️ Delete</a>
-                </div>
-            </div>
+        <div th:if="${not #lists.isEmpty(tasks)}">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Event</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="task : ${tasks}">
+                        <td th:text="${task.title}"></td>
+                        <td th:text="${task.description}"></td>
+                        <td th:text="${task.event.title}"></td>
+                        
+                    </tr>
+                </tbody>
+            </table>
         </div>
+        
 
 
         <a class="back-link" href="/">← Back to Home</a>

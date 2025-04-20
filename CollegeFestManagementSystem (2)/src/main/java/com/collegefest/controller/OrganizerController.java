@@ -58,11 +58,23 @@ public class OrganizerController implements Subject {
             return "redirect:/organizer/login";
         }
 
+        // Get organizer's events
         List<Event> events = eventRepo.findByOrganizer(organizer);
+        
+        // Get all tasks for these events
+        List<Task> tasks = new ArrayList<>();
+        for (Event event : events) {
+            tasks.addAll(taskRepo.findByEvent(event));
+        }
+
         model.addAttribute("organizer", organizer);
         model.addAttribute("events", events);
-        List<NotificationEntity> notifications = notificationRepository.findByRecipientUsernameOrderByTimestampDesc(organizer.getUsername());
+        model.addAttribute("tasks", tasks); // Add tasks to the model
+        
+        List<NotificationEntity> notifications = notificationRepository
+            .findByRecipientUsernameOrderByTimestampDesc(organizer.getUsername());
         model.addAttribute("notifications", notifications);
+        
         return "organizer-dashboard";
     }
 
@@ -181,15 +193,22 @@ public class OrganizerController implements Subject {
 
 
     @PostMapping("/event/{eventId}/task")
-    public String createTask(@PathVariable Long eventId, @ModelAttribute Task taskRequest, HttpSession session) {
+    public String createTask(@PathVariable Long eventId, 
+                            @ModelAttribute Task taskRequest, 
+                            HttpSession session) {
+        Organizer organizer = (Organizer) session.getAttribute("loggedInOrganizer");
+        if (organizer == null) {
+            return "redirect:/organizer/login";
+        }
+
         Optional<Event> optionalEvent = eventRepo.findById(eventId);
-        if (!optionalEvent.isPresent()) {
+        if (!optionalEvent.isPresent() || 
+            !optionalEvent.get().getOrganizer().getId().equals(organizer.getId())) {
             return "redirect:/organizer/dashboard";  
         }
 
         Event event = optionalEvent.get();
         taskRequest.setEvent(event);
-
         taskRepo.save(taskRequest);
 
         return "redirect:/organizer/dashboard";  
