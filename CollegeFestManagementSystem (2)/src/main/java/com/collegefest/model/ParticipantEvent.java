@@ -26,4 +26,11 @@ public class ParticipantEvent {
 
     public Event getEvent() { return event; }
     public void setEvent(Event event) { this.event = event; }
+    private String attendanceStatus;
+    public String getAttendanceStatus() {
+        return attendanceStatus;
+    }
+    public void setAttendanceStatus(String attendanceStatus) {
+        this.attendanceStatus = attendanceStatus;
+    }
 }

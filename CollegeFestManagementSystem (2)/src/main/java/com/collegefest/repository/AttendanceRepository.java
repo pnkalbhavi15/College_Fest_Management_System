@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     List<Attendance> findByVolunteer(Volunteer volunteer);
-    List<Attendance> findByVolunteerAndCheckOutTimeIsNull(Volunteer volunteer); // This method belongs here
+    List<Attendance> findByVolunteerAndCheckOutTimeIsNull(Volunteer volunteer);
 }

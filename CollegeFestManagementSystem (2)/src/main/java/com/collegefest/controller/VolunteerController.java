@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.collegefest.model.Attendance;
 import com.collegefest.model.Event;
+import com.collegefest.model.ParticipantEvent;
 import com.collegefest.model.Volunteer;
 import com.collegefest.repository.AttendanceRepository;
 import com.collegefest.repository.EventRepository;
+import com.collegefest.repository.ParticipantEventRepository;
 import com.collegefest.repository.VolunteerRepository;
-import com.collegefest.strategy.AuthenticationStrategy;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -32,13 +33,21 @@ public class VolunteerController {
 
     @Autowired
     private AttendanceRepository attendanceRepo;
+
+    @Autowired 
+    private ParticipantEventRepository participantEventRepo;
     
 
     @GetMapping("/volunteer/login")
     public String loginPage() {
         return "Volunteer_login";
     }
-    
+    @GetMapping("/volunteer/events")
+    public String showEvents(Model model) {
+        List<Event> events = eventRepository.findAll();  // use the repo here
+        model.addAttribute("events", events);
+        return "volunteer_events"; // this would be a Thymeleaf or JSP page to render them
+    }
     @GetMapping("/volunteer/dashboard/attendance")
     public String attendancePage(HttpSession session, Model model) {
         Volunteer volunteer = (Volunteer) session.getAttribute("loggedInVolunteer");
@@ -51,7 +60,6 @@ public class VolunteerController {
         model.addAttribute("volunteer", volunteer);
         return "volunteer_attendance";
     }
-
     @PostMapping("/volunteer/check-in")
     public String checkIn(HttpSession session) {
         Volunteer volunteer = (Volunteer) session.getAttribute("loggedInVolunteer");
@@ -79,22 +87,13 @@ public class VolunteerController {
         return "redirect:/volunteer/dashboard/attendance";
     }
 
-    @Autowired
-    @org.springframework.beans.factory.annotation.Qualifier("basicAuthenticationStrategy")
-    private AuthenticationStrategy authenticationStrategy;
-
-    private Volunteer decorateVolunteer(Volunteer volunteer) {
-        return new com.collegefest.decorator.LoggingVolunteerDecorator(volunteer);
-    }
-
     @PostMapping("/volunteer/login")
     public String login(@RequestParam String username,
                        @RequestParam String password,
                        Model model,
                        HttpSession session) {
-        if (authenticationStrategy.authenticate(username, password)) {
-            Volunteer volunteer = volunteerRepo.findByUsernameAndPassword(username, password);
-            volunteer = decorateVolunteer(volunteer);
+        Volunteer volunteer = volunteerRepo.findByUsernameAndPassword(username, password);
+        if (volunteer != null) {
             session.setAttribute("loggedInVolunteer", volunteer);
             return "redirect:/volunteer/dashboard";
         } else {
@@ -140,13 +139,37 @@ public class VolunteerController {
         if (volunteer == null) {
             return "redirect:/volunteer/login";
         }
-        
-        List<Event> approvedEvents = eventRepository.findByStatus("APPROVED");
+
+        List<Attendance> attendanceRecords = attendanceRepo.findByVolunteer(volunteer);
+        List<ParticipantEvent> participantEvents = participantEventRepo.findAll();
+        List<Event> events = eventRepository.findAll();  // <- Add this line
+
         model.addAttribute("volunteer", volunteer);
-        model.addAttribute("events", approvedEvents);
-        return "Volunteer_dashboard";
+        model.addAttribute("attendanceRecords", attendanceRecords);
+        model.addAttribute("participantEvents", participantEvents);
+        model.addAttribute("events", events);  // <- Add this line
+
+        return "volunteer_dashboard";
     }
-    
+    @PostMapping("/volunteer/mark-attendance")
+    public String markAttendance(
+        @RequestParam Long participantEventId,
+        @RequestParam String status,
+        HttpSession session) {
+        
+        Volunteer volunteer = (Volunteer) session.getAttribute("loggedInVolunteer");
+        if (volunteer == null) {
+            return "redirect:/volunteer/login";
+        }
+        
+        ParticipantEvent participantEvent = participantEventRepo.findById(participantEventId).orElse(null);
+        if (participantEvent != null) {
+            participantEvent.setAttendanceStatus(status);
+            participantEventRepo.save(participantEvent);
+        }
+        
+        return "redirect:/volunteer/dashboard";
+    }
     @GetMapping("/volunteer/logout")
     public String logout(HttpSession session) {
         session.invalidate();

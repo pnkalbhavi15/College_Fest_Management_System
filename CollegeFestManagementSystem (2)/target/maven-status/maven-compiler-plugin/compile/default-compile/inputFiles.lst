@@ -14,6 +14,7 @@ C:\Users\ssspr\Desktop\SEM 6\Project\OOAD\fest_management\College_Fest_Managemen
 C:\Users\ssspr\Desktop\SEM 6\Project\OOAD\fest_management\College_Fest_Management_System\CollegeFestManagementSystem (2)\src\main\java\com\collegefest\model\NotificationEntity.java
 C:\Users\ssspr\Desktop\SEM 6\Project\OOAD\fest_management\College_Fest_Management_System\CollegeFestManagementSystem (2)\src\main\java\com\collegefest\model\Organizer.java
 C:\Users\ssspr\Desktop\SEM 6\Project\OOAD\fest_management\College_Fest_Management_System\CollegeFestManagementSystem (2)\src\main\java\com\collegefest\model\Participant.java
+C:\Users\ssspr\Desktop\SEM 6\Project\OOAD\fest_management\College_Fest_Management_System\CollegeFestManagementSystem (2)\src\main\java\com\collegefest\model\ParticipantAttendance.java
 C:\Users\ssspr\Desktop\SEM 6\Project\OOAD\fest_management\College_Fest_Management_System\CollegeFestManagementSystem (2)\src\main\java\com\collegefest\model\ParticipantEvent.java
 C:\Users\ssspr\Desktop\SEM 6\Project\OOAD\fest_management\College_Fest_Management_System\CollegeFestManagementSystem (2)\src\main\java\com\collegefest\model\Task.java
 C:\Users\ssspr\Desktop\SEM 6\Project\OOAD\fest_management\College_Fest_Management_System\CollegeFestManagementSystem (2)\src\main\java\com\collegefest\model\Volunteer.java
@@ -29,6 +30,7 @@ C:\Users\ssspr\Desktop\SEM 6\Project\OOAD\fest_management\College_Fest_Managemen
 C:\Users\ssspr\Desktop\SEM 6\Project\OOAD\fest_management\College_Fest_Management_System\CollegeFestManagementSystem (2)\src\main\java\com\collegefest\repository\EventRepository.java
 C:\Users\ssspr\Desktop\SEM 6\Project\OOAD\fest_management\College_Fest_Management_System\CollegeFestManagementSystem (2)\src\main\java\com\collegefest\repository\NotificationRepository.java
 C:\Users\ssspr\Desktop\SEM 6\Project\OOAD\fest_management\College_Fest_Management_System\CollegeFestManagementSystem (2)\src\main\java\com\collegefest\repository\OrganizerRepository.java
+C:\Users\ssspr\Desktop\SEM 6\Project\OOAD\fest_management\College_Fest_Management_System\CollegeFestManagementSystem (2)\src\main\java\com\collegefest\repository\ParticipantAttendanceRepository.java
 C:\Users\ssspr\Desktop\SEM 6\Project\OOAD\fest_management\College_Fest_Management_System\CollegeFestManagementSystem (2)\src\main\java\com\collegefest\repository\ParticipantEventRepository.java
 C:\Users\ssspr\Desktop\SEM 6\Project\OOAD\fest_management\College_Fest_Management_System\CollegeFestManagementSystem (2)\src\main\java\com\collegefest\repository\ParticipantRepository.java
 C:\Users\ssspr\Desktop\SEM 6\Project\OOAD\fest_management\College_Fest_Management_System\CollegeFestManagementSystem (2)\src\main\java\com\collegefest\repository\TaskRepository.java

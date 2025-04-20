@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ParticipantEventRepository extends JpaRepository<ParticipantEvent, Long> {
     List<ParticipantEvent> findByParticipant(Participant participant);
+    List<ParticipantEvent> findAll();
 }

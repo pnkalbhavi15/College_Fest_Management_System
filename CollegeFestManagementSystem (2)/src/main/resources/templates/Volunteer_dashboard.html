@@ -4,6 +4,7 @@
     <title>Volunteer Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -31,29 +32,14 @@
             font-family: 'Poppins', sans-serif;
             color: var(--text-color);
             line-height: 1.6;
-            padding: 20px 0 0; 
+            padding: 20px;
             min-height: 100vh;
-            margin: 0;
-            overflow-y: auto; /* Enable vertical scrolling for the body */
-            padding-top: 350px;
-            overflow-x: hidden;
         }
         
         .dashboard-container {
             width: 100%;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
-            min-height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .main-content {
-            flex: 1;
-            padding-bottom: 20px;
-            margin-top: 0 !important;
-            
         }
         
         /* Header Styles */
@@ -67,11 +53,6 @@
             margin-bottom: 25px;
             box-shadow: var(--shadow);
             transition: var(--transition);
-            /* Removed sticky positioning */
-            position: relative;
-            top: 0 !important;
-            width: 100%;
-            z-index: 100;
         }
         
         .top-bar:hover {
@@ -112,8 +93,6 @@
             margin-bottom: 30px;
             box-shadow: var(--shadow);
             transition: var(--transition);
-            max-height: 400px; /* Increased max height */
-            overflow-y: auto;
         }
         
         .volunteer-info:hover {
@@ -316,6 +295,72 @@
             color: var(--light-color);
         }
         
+        /* Attendance Table Styles */
+        .attendance-table {
+            width: 100%;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-top: 20px;
+            overflow: hidden;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        .attendance-table th {
+            background-color: #f8f9fa;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--light-color);
+        }
+        
+        .attendance-table td {
+            padding: 12px 15px;
+            border-top: 1px solid var(--light-color);
+            vertical-align: middle;
+        }
+        
+        .attendance-table tr:hover td {
+            background-color: rgba(72, 149, 239, 0.05);
+        }
+        
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        
+        .bg-success { 
+            background-color: var(--success-color) !important; 
+            color: white; 
+        }
+        
+        .bg-danger { 
+            background-color: var(--danger-color) !important; 
+            color: white; 
+        }
+        
+        .bg-secondary { 
+            background-color: var(--text-light) !important; 
+            color: white; 
+        }
+        
+        .btn-sm {
+            padding: 0.35rem 0.65rem;
+            font-size: 0.85rem;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .btn-sm:hover {
+            transform: translateY(-2px);
+        }
+        
         /* Responsive Adjustments */
         @media (max-width: 992px) {
             .dashboard-content {
@@ -343,6 +388,11 @@
             .info-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .attendance-table {
+                display: block;
+                overflow-x: auto;
+            }
         }
         
         /* Icons (using Unicode as placeholder - you can replace with actual icon fonts) */
@@ -369,12 +419,6 @@
         .card:nth-child(1) { animation-delay: 0.1s; }
         .card:nth-child(2) { animation-delay: 0.2s; }
         .card:nth-child(3) { animation-delay: 0.3s; }
-
-        /* Fix for scrolling issues */
-        html {
-            scroll-behavior: smooth;
-            height: 100%;
-        }
     </style>
 </head>
 <body>
@@ -387,69 +431,107 @@
             </a>
         </div>
         
-        <!-- Main content area that will scroll -->
-        <div class="main-content">
-            <!-- Success message when profile is updated -->
-            <div th:if="${param.success}" class="alert alert-success">
-                <span class="icon">✅</span> Profile updated successfully!
-            </div>
-            
-            <!-- Volunteer information section at the top -->
-            <div class="volunteer-info">
-                <h2><span class="icon">👋</span> <span th:text="${'Welcome, ' + volunteer.username}">Welcome, Prapti</span></h2>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="info-label">Username</span>
-                        <span class="info-value" th:text="${volunteer.username}">prapti</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Email</span>
-                        <span class="info-value" th:text="${volunteer.email}">praptiarai@gmail.com</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Phone</span>
-                        <span class="info-value" th:text="${volunteer.phoneNumber ?: 'Not provided'}">8861940183</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Department</span>
-                        <span class="info-value" th:text="${volunteer.department ?: 'Not assigned'}">CSE</span>
-                    </div>
+        <!-- Success message when profile is updated -->
+        <div th:if="${param.success}" class="alert alert-success">
+            <span class="icon">✅</span> Profile updated successfully!
+        </div>
+        
+        <!-- Volunteer information section at the top -->
+        <div class="volunteer-info">
+            <h2><span class="icon">👋</span> <span th:text="${'Welcome, ' + volunteer.username}">Welcome, Prapti</span></h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Username</span>
+                    <span class="info-value" th:text="${volunteer.username}">prapti</span>
                 </div>
-            </div>
-            
-            <!-- Dashboard content in a responsive grid -->
-            <div class="dashboard-content">
-                <div class="card">
-                    <h3><span class="icon">📅</span> Upcoming Events</h3>
-                    <div th:if="${#lists.isEmpty(events)}" class="empty-state">
-                        <div class="icon">📭</div>
-                        <p>No upcoming events assigned yet.</p>
-                    </div>
-                    <div th:each="event : ${events}">
-                        <div class="event">
-                            <div class="event-date">
-                                <span class="icon">📆</span>
-                                <span th:text="${event.date}">October 15, 2023</span>
-                            </div>
-                            <div class="event-title" th:text="${event.title}">Annual Charity Gala</div>
-                            <div class="event-desc" th:text="${event.description}">Help organize and manage the annual fundraising event for local schools.</div>
-                            <div class="event-meta">
-                                <span><span class="icon">📍</span> <span th:text="${event.venue}">Grand Ballroom</span></span>
-                                <span><span class="icon">👤</span> <span th:text="${event.organizer.username}">Event Coordinator</span></span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="info-item">
+                    <span class="info-label">Email</span>
+                    <span class="info-value" th:text="${volunteer.email}">praptiarai@gmail.com</span>
                 </div>
-                
-                <div class="card">
-                    <h3><span class="icon">✅</span> Tasks</h3>
-                    <div class="empty-state">
-                        <div class="icon">📋</div>
-                        <p>No tasks assigned yet.</p>
-                    </div>
+                <div class="info-item">
+                    <span class="info-label">Phone</span>
+                    <span class="info-value" th:text="${volunteer.phoneNumber ?: 'Not provided'}">8861940183</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Department</span>
+                    <span class="info-value" th:text="${volunteer.department ?: 'Not assigned'}">CSE</span>
                 </div>
             </div>
         </div>
+        
+        <!-- Dashboard content in a responsive grid -->
+        <div class="dashboard-content">
+            <div class="card">
+                <h3><span class="icon">📅</span> Upcoming Events</h3>
+                <div th:if="${#lists.isEmpty(events)}" class="empty-state">
+                    <div class="icon">📭</div>
+                    <p>No upcoming events assigned yet.</p>
+                </div>
+                <div th:each="event : ${events}">
+                    <div class="event">
+                        <div class="event-date">
+                            <span class="icon">📆</span>
+                            <span th:text="${#temporals.format(event.date, 'yyyy-MM-dd')}">October 15, 2023</span>
+                        </div>
+                        <div class="event-title" th:text="${event.title}">Annual Charity Gala</div>
+                        <div class="event-desc" th:text="${event.description}">Help organize and manage the annual fundraising event for local schools.</div>
+                        <div class="event-meta">
+                            <span><span class="icon">📍</span> <span th:text="${event.venue}">Grand Ballroom</span></span>
+                            <span><span class="icon">👤</span> <span th:text="${event.organizer.username}">Event Coordinator</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3><span class="icon">✅</span> Tasks</h3>
+                <div class="empty-state">
+                    <div class="icon">📋</div>
+                    <p>No tasks assigned yet.</p>
+                </div>
+            </div>
+            
+            
+        </div>
+        
+        <!-- Attendance Section -->
+        <div class="card">
+            <h3><span class="icon">👥</span> Participant Attendance Management</h3>
+            <p>Mark participants as present or absent for events</p>
+            
+            <table class="attendance-table">
+                <thead>
+                    <tr>
+                        <th>Participant</th>
+                        <th>Event</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="pe : ${participantEvents}">
+                        <td th:text="${pe.participant.username}"></td>
+                        <td th:text="${pe.event.title}"></td>
+                        <td th:text="${#temporals.format(pe.event.date, 'yyyy-MM-dd')}"></td>
+                        <td>
+                            <span th:if="${pe.attendanceStatus == 'PRESENT'}" class="badge bg-success">Present</span>
+                            <span th:if="${pe.attendanceStatus == 'ABSENT'}" class="badge bg-danger">Absent</span>
+                            <span th:if="${pe.attendanceStatus == null}" class="badge bg-secondary">Pending</span>
+                        </td>
+                        <td>
+                            <form th:action="@{/volunteer/mark-attendance}" method="post" style="display: inline;">
+                                <input type="hidden" name="participantEventId" th:value="${pe.id}">
+                                <button type="submit" name="status" value="PRESENT" class="btn btn-sm btn-success">Present</button>
+                                <button type="submit" name="status" value="ABSENT" class="btn btn-sm btn-danger">Absent</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Volunteer Check-in Section -->
         <div class="card">
             <h3><span class="icon">🕒</span> Your Attendance</h3>
             <p>Manage your own attendance records</p>
@@ -458,5 +540,8 @@
             </a>
         </div>
     </div>
+    
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

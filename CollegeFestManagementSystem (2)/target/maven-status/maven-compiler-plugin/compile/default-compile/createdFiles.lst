@@ -18,6 +18,8 @@ com\collegefest\CollegeFestManagementSystemApplication.class
 com\collegefest\model\Participant.class
 com\collegefest\model\Task.class
 com\collegefest\model\Attendance.class
+com\collegefest\model\ParticipantAttendance.class
+com\collegefest\repository\ParticipantAttendanceRepository.class
 com\collegefest\repository\AdminRepository.class
 com\collegefest\controller\ParticipantAuthController.class
 com\collegefest\repository\EventRepository.class
