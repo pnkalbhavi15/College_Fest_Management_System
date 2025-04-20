@@ -44,9 +44,10 @@ public class VolunteerController {
     }
     @GetMapping("/volunteer/events")
     public String showEvents(Model model) {
-        List<Event> events = eventRepository.findAll();  // use the repo here
+        // Only show APPROVED events
+        List<Event> events = eventRepository.findByStatus("APPROVED");
         model.addAttribute("events", events);
-        return "volunteer_events"; // this would be a Thymeleaf or JSP page to render them
+        return "volunteer_events";
     }
     @GetMapping("/volunteer/dashboard/attendance")
     public String attendancePage(HttpSession session, Model model) {
@@ -131,8 +132,6 @@ public class VolunteerController {
         return "Volunteer_login";
     }
 
-    
-    
     @GetMapping("/volunteer/dashboard")
     public String dashboard(HttpSession session, Model model) {
         Volunteer volunteer = (Volunteer) session.getAttribute("loggedInVolunteer");
@@ -140,17 +139,20 @@ public class VolunteerController {
             return "redirect:/volunteer/login";
         }
 
+        // Only fetch APPROVED events
+        List<Event> events = eventRepository.findByStatus("APPROVED");
         List<Attendance> attendanceRecords = attendanceRepo.findByVolunteer(volunteer);
         List<ParticipantEvent> participantEvents = participantEventRepo.findAll();
-        List<Event> events = eventRepository.findAll();  // <- Add this line
 
         model.addAttribute("volunteer", volunteer);
         model.addAttribute("attendanceRecords", attendanceRecords);
         model.addAttribute("participantEvents", participantEvents);
-        model.addAttribute("events", events);  // <- Add this line
+        model.addAttribute("events", events);
 
         return "volunteer_dashboard";
     }
+    
+    
     @PostMapping("/volunteer/mark-attendance")
     public String markAttendance(
         @RequestParam Long participantEventId,
