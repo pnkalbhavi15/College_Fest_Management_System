@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>College Fest Management System</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to College Fest Management System</h1>
+        <form th:action="@{/redirectToLogin}" method="get">
+            <label for="role">Login as:</label>
+            <select name="role" id="role" required>
+                <option value="">-- Select Role --</option>
+                <option value="admin">Admin</option>
+                <option value="organizer">Organizer</option>
+                <option value="volunteer">Volunteer</option>
+                <option value="participant">Participant</option>
+                <!-- Add participant and judge later -->
+            </select>
+            <br><br>
+            <button type="submit">Go to Login</button>
+        </form>
+    </div>
+</body>
+</html>
