@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Task</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <style>
+        /* Styles for the form */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #43cea2, #185a9d);
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-container {
+            width: 90%;
+            max-width: 600px;
+            margin: 80px auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 16px rgba(255,255,255,0.2);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        button {
+            background-color: #f39c12;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        a {
+            display: block;
+            margin-top: 20px;
+            color: white;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Create New Task</h2>
+        <form th:action="@{/organizer/event/{eventId}/task(eventId=${event.id})}" th:object="${task}" method="post">
+            <input type="hidden" th:field="*{event.id}" th:value="${event.id}"/>
+        
+            <label for="title">Task Title:</label>
+            <input type="text" th:field="*{title}" required/>
+        
+            <label for="name">Name:</label>
+            <input type="text" th:field="*{name}" required/>
+        
+            <label for="description">Description:</label>
+            <textarea th:field="*{description}" rows="4" required></textarea>
+        
+            <button type="submit">Create Task</button>
+        </form>
+        
+        <a th:href="@{/organizer/dashboard}">← Back to Dashboard</a>
+    </div>
+</body>
+</html>

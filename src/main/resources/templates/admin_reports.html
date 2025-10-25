@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Reports</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+        .report-container {
+            margin: 40px auto;
+            max-width: 800px;
+            background: rgba(0,0,0,0.4);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(255,255,255,0.2);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .report-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        h3 {
+            margin: 0 0 10px;
+        }
+        canvas {
+            margin-top: 10px;
+        }
+        .btn-export {
+            background: #1abc9c;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            float: right;
+            cursor: pointer;
+        }
+        .btn-export:hover {
+            background: #16a085;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #8e44ad;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            background: #732d91;
+        }
+    </style>
+</head>
+<body>
+<div class="report-container">
+    <h2>📊 Admin Reports Dashboard</h2>
+
+    <!-- Doughnut Chart for Event Status -->
+    <div class="report-card">
+        <h3>
+            Event Status Distribution
+            <button class="btn-export" onclick="exportChart('statusChart', 'event-status')">Export</button>
+        </h3>
+        <canvas id="statusChart" width="400" height="200"></canvas>
+    </div>
+
+    <!-- Bar Chart for Events by Organizer -->
+    <div class="report-card">
+        <h3>
+            Events per Organizer
+            <button class="btn-export" onclick="exportChart('organizerChart', 'organizer-events')">Export</button>
+        </h3>
+        <canvas id="organizerChart" width="400" height="200"></canvas>
+    </div>
+
+    <a class="back-link" th:href="@{/admin/dashboard}">← Back to Dashboard</a>
+</div>
+
+<script th:inline="javascript">
+    const approved = [[${approvedCount}]];
+    const pending = [[${pendingCount}]];
+    const rejected = [[${rejectedCount}]];
+
+    const organizerLabels = [[${organizerCounts.keySet()}]];
+    const organizerCounts = [[${organizerCounts.values()}]];
+
+    const statusCtx = document.getElementById('statusChart').getContext('2d');
+    new Chart(statusCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Approved', 'Pending', 'Rejected'],
+            datasets: [{
+                data: [approved, pending, rejected],
+                backgroundColor: ['#2ecc71', '#f1c40f', '#e74c3c'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { color: 'white' }
+                }
+            }
+        }
+    });
+
+    const organizerCtx = document.getElementById('organizerChart').getContext('2d');
+    new Chart(organizerCtx, {
+        type: 'bar',
+        data: {
+            labels: organizerLabels,
+            datasets: [{
+                label: 'Event Count',
+                data: organizerCounts,
+                backgroundColor: '#3498db'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    ticks: { color: 'white' }
+                },
+                y: {
+                    ticks: { color: 'white' }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: { color: 'white' }
+                }
+            }
+        }
+    });
+
+    function exportChart(chartId, filename) {
+        const canvas = document.getElementById(chartId);
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = `${filename}.png`;
+        link.click();
+    }
+</script>
+</body>
+</html>
