@@ -1,0 +1,109 @@
+<!-- src/main/resources/templates/volunteer_attendance.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Attendance</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <style>
+        .container {
+            margin: 30px auto;
+            max-width: 800px;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            border-radius: 12px;
+            color: #fff;
+        }
+        
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .attendance-actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .btn-checkin {
+            background-color: #27ae60;
+        }
+        
+        .btn-checkout {
+            background-color: #e74c3c;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+        
+        th {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .status-present {
+            color: #2ecc71;
+        }
+        
+        a.back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #fff;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>📅 Attendance Management</h2>
+        
+        <div class="attendance-actions">
+            <form th:action="@{/volunteer/check-in}" method="post">
+                <button type="submit" class="btn btn-checkin">Check In</button>
+            </form>
+            <form th:action="@{/volunteer/check-out}" method="post">
+                <button type="submit" class="btn btn-checkout">Check Out</button>
+            </form>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="record : ${attendanceRecords}">
+                    <td th:text="${#temporals.format(record.checkInTime, 'yyyy-MM-dd')}">Date</td>
+                    <td th:text="${#temporals.format(record.checkInTime, 'HH:mm:ss')}">Check In</td>
+                    <td th:text="${record.checkOutTime != null} ? ${#temporals.format(record.checkOutTime, 'HH:mm:ss')} : 'Not checked out'">Check Out</td>
+                    <td th:text="${record.status}" th:class="${'status-' + record.status.toLowerCase()}">Status</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <a class="back-link" th:href="@{/volunteer/dashboard}">← Back to Dashboard</a>
+    </div>
+</body>
+</html>

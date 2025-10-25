@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Signup</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            background-attachment: fixed;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    
+        .signup-container {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            color: #fff;
+        }
+    
+        h2 {
+            text-align: center;
+            margin-bottom: 24px;
+            font-size: 28px;
+        }
+    
+        label {
+            display: block;
+            margin-top: 16px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+    
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            background-color: rgba(255,255,255,0.9);
+            color: #000;
+            font-size: 15px;
+        }
+    
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 24px;
+            background-color: #f39c12;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    
+        button:hover {
+            background-color: #e67e22;
+        }
+    
+        .message {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    
+        .message.error {
+            color: #ff6b6b;
+        }
+    
+        .message.success {
+            color: #2ecc71;
+        }
+    
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #fff;
+            text-decoration: underline;
+        }
+    
+        .back-link:hover {
+            text-decoration: none;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="signup-container">
+        <h2>Admin Signup</h2>
+        <form th:action="@{/signup}" method="post">
+            <label>Username:</label>
+            <input type="text" name="username" required>
+
+            <label>Password:</label>
+            <input type="password" name="password" required>
+
+            <label>Email:</label>
+            <input type="email" name="email">
+
+            <button type="submit">Register</button>
+        </form>
+
+        <p th:if="${error}" th:text="${error}" class="message error"></p>
+        <p th:if="${success}" th:text="${success}" class="message success"></p>
+
+        <a th:href="@{/login}" class="back-link">← Back to login</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Events</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <style>
+        .container {
+            margin: 30px auto;
+            max-width: 1000px;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            border-radius: 12px;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255,255,255,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+
+        th {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .status {
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .PENDING {
+            background-color: #f39c12;
+        }
+
+        .APPROVED {
+            background-color: #27ae60;
+        }
+
+        .REJECTED {
+            background-color: #e74c3c;
+        }
+
+        a.back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #fff;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>📋 All Events Overview</h2>
+
+        <div style="margin-bottom: 20px; display: flex; justify-content: space-between; flex-wrap: wrap;">
+            <div>
+                <label>Status:</label>
+                <select id="statusFilter">
+                    <option value="ALL">All</option>
+                    <option value="APPROVED">Approved</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="REJECTED">Rejected</option>
+                </select>
+            </div>
+            <div>
+                <label>Organizer:</label>
+                <select id="organizerFilter">
+                    <option value="ALL">All</option>
+                    <option th:each="org : ${organizers}" th:value="${org}" th:text="${org}"></option>
+                </select>
+            </div>
+        </div>
+        
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Organizer</th>
+                    <th>Date</th>
+                    <th>Venue</th>
+                    <th>Status</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="event : ${events}">
+                    <td th:text="${event.title}">Title</td>
+                    <td th:text="${event.organizer.username}">Organizer</td>
+                    <td th:text="${event.date}">Date</td>
+                    <td th:text="${event.venue}">Venue</td>
+                    <td><span th:text="${event.status}" th:class="'status ' + ${event.status}">Status</span></td>
+                    <td th:text="${event.description}">Description</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a class="back-link" th:href="@{/admin/dashboard}">← Back to Dashboard</a>
+    </div>
+</body>
+</html>
+
+<script>
+    const statusSelect = document.getElementById("statusFilter");
+    const organizerSelect = document.getElementById("organizerFilter");
+
+    statusSelect.addEventListener("change", filterEvents);
+    organizerSelect.addEventListener("change", filterEvents);
+
+    function filterEvents() {
+        const status = statusSelect.value;
+        const organizer = organizerSelect.value;
+
+        const rows = document.querySelectorAll("tbody tr");
+        rows.forEach(row => {
+            const eventStatus = row.querySelector(".status").textContent.trim();
+            const eventOrganizer = row.children[1].textContent.trim();
+
+            const matchesStatus = status === "ALL" || eventStatus === status;
+            const matchesOrganizer = organizer === "ALL" || eventOrganizer === organizer;
+
+            row.style.display = matchesStatus && matchesOrganizer ? "" : "none";
+        });
+    }
+</script>
+
